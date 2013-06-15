@@ -1,0 +1,27 @@
+{
+    "name": "h2o",
+    "version": "0.0.1",
+    "author": "Pixels & Bytes <pxandbytes@gmail.com>",
+    "description": "Minimal and pluggable boilerplate for express",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/pixelsandbytes/h2o.git"
+    },
+    "keywords": [
+        "express", "boilerplate", "web", "server", "minimal"
+    ],
+    "devDependencies": {
+        "grunt": "~0.4.1",
+        "grunt-cli": "~0.1.9",
+        "grunt-contrib-jshint": "~0.6.0",
+        "grunt-simple-mocha": "~0.4.0",
+        "should": "~1.2.2"
+    },
+    "dependencies": {
+        "express": "~3.2.6"
+    },
+    "engines": {
+        "node": ">=0.10"
+    },
+    "license": "MIT"
+}
