@@ -2,13 +2,24 @@
     "name": "h2o",
     "version": "0.0.1",
     "author": "Pixels & Bytes <pxandbytes@gmail.com>",
-    "description": "Minimal and pluggable boilerplate for express",
+    "description": "Minimal and configurable boilerplate for express",
+    "main": "./lib/server.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/pixelsandbytes/h2o.git"
     },
     "keywords": [
-        "express", "boilerplate", "web", "server", "minimal"
+        "app",
+        "boilerplate",
+        "configure",
+        "configurable",
+        "express",
+        "h2o",
+        "minimal",
+        "server",
+        "simple",
+        "water",
+        "web"
     ],
     "devDependencies": {
         "grunt": "~0.4.1",
@@ -18,10 +29,11 @@
         "should": "~1.2.2"
     },
     "dependencies": {
-        "express": "~3.2.6"
+        "express": "~3.2.6",
+        "hydrogen": "~0.2.0"
     },
     "engines": {
-        "node": ">=0.10"
+        "node": ">=0.8"
     },
     "license": "MIT"
 }
