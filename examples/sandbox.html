@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello World</title>
+</head>
+
+<body>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script type="text/javascript">
+    $.ajax({
+        url: '/fail-delay'
+    })
+    .done(function(data) {
+        alert(JSON.stringify(data));
+    })
+    .fail(function(xhr, status, error) {
+        alert(error);
+    });
+    </script>
+</body>
+
+</html>
