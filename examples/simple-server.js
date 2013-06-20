@@ -1,7 +1,8 @@
 /* jshint strict: false */
 var h2o = require('./../lib/server.js'),
-    logger = require('./../lib/impl/logger-console.js'),
-    responder = require('./../lib/impl/responder-basic.js'),
+    logger = require('./../lib/impl/logger-console'),
+    responder = require('./responder-basic.js'),
+    errorHandler = require('./../lib/impl/error-with-xhr')(responder, logger),
     express = require('express');
 
 function defineApp(app) {
@@ -33,5 +34,5 @@ function defineApp(app) {
 h2o()
     .setAppDefiner(defineApp)
     .setLogger(logger)
-    .setResponseSender(responder)
+    .setErrorHandler(errorHandler)
     .run();
