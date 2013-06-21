@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>H2O</title>
+
+    <style>
+        body {
+            font-family: Helvetica, Arial, Verdana, sans-serif;
+            line-height: 2em;
+            color: darkslategrey;
+        }
+
+        pre {
+            margin: 0px;
+        }
+
+        label {
+            color: cornsilk;
+        }
+
+        section {
+            margin-bottom: 1em;
+        }
+
+        section div {
+            padding: 5px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+        }
+
+        section div.req {
+            background-color: darkseagreen;
+        }
+        section div.res {
+            background-color: cadetblue;
+        }
+        section div.err {
+            background-color: coral;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="foo">
+        <div class="req"><label>Request:</label> <span>/foo</span></div>
+        <div class="res"><label>Response:</label> <pre></pre></div>
+        <div class="err"><label>Error:</label> <span></span></div>
+    </section>
+
+    <section id="fail">
+        <div class="req"><label>Request:</label> <span>/fail</span></div>
+        <div class="res"><label>Response:</label> <pre></pre></div>
+        <div class="err"><label>Error:</label> <span></span></div>
+    </section>
+
+    <section id="failAsync">
+        <div class="req"><label>Request:</label> <span>/fail-async</span></div>
+        <div class="res"><label>Response:</label> <pre></pre></div>
+        <div class="err"><label>Error:</label> <span></span></div>
+    </section>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script type="text/javascript">
+    $.ajax({
+        url: '/foo'
+    })
+    .done(function(data) {
+        $('#foo .res pre').html(JSON.stringify(data));
+    })
+    .fail(function(xhr, status, error) {
+        $('#foo .err span').html(error);
+    });
+
+    $.ajax({
+        url: '/fail'
+    })
+    .done(function(data) {
+        $('#fail .res pre').html(JSON.stringify(data));
+    })
+    .fail(function(xhr, status, error) {
+        $('#fail .err span').html(error);
+    });
+
+    $.ajax({
+        url: '/fail-async'
+    })
+    .done(function(data) {
+        $('#failAsync .res pre').html(JSON.stringify(data));
+    })
+    .fail(function(xhr, status, error) {
+        $('#failAsync .err span').html(error);
+    });
+    </script>
+</body>
+
+</html>

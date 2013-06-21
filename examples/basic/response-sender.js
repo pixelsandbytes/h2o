@@ -17,12 +17,10 @@ r.sendErrorJSON = function sendErrorJSON(res, err, status) {
 };
 
 r.sendErrorPage = function sendErrorPage(res, err, status) {
-    var errHTML = '<!DOCTYPE html><head><title>' +
-        (err.message || 'Something went wrong...') +
-        '</title></head><body>' +
-        (err.message || 'Something went wrong...') +
-        '</body></html>';
-    this.sendPage(res, errHTML, status);
+    var title = 'Page not found';
+    var body = '<h1>Oops, something went wrong</h1>' +
+        '<p>' + err.message + '</p>';
+    this.sendPage(res, title, body, status);
 };
 
 r.sendJSON = function sendJSON(res, obj, status) {
@@ -35,7 +33,12 @@ r.sendJSON = function sendJSON(res, obj, status) {
     res.end();
 };
 
-r.sendPage = function sendPage(res, htmlString, status) {
+r.sendPage = function sendPage(res, title, body, status) {
+    var htmlString = '<!DOCTYPE html><head><title>' + title + '</title></head><body>' + body + '</body></html>';
+    this.sendRawPage(res, htmlString, status);
+};
+
+r.sendRawPage = function sendPage(res, htmlString, status) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Content-Length', htmlString.length);
     status = status || 200;
