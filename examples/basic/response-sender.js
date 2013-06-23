@@ -18,7 +18,7 @@ r.sendErrorJSON = function sendErrorJSON(res, err, status) {
 
 r.sendErrorPage = function sendErrorPage(res, err, status) {
     var title = 'Page not found';
-    var body = '<h1>Oops, something went wrong</h1>' +
+    var body = '<h1>Something went wrong</h1>' +
         '<p>' + err.message + '</p>';
     this.sendPage(res, title, body, status);
 };

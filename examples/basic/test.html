@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>H2O: Basic Example</title>
+
+    <style>
+        body {
+            font-family: Helvetica, Arial, Verdana, sans-serif;
+            line-height: 2em;
+            color: darkslategrey;
+            font-weight: bold;
+        }
+
+        pre {
+            margin: 0px;
+            font-size: 1.25em;
+        }
+
+        label,
+        .req span:before {
+            color: slategrey;
+            font-weight: normal;
+        }
+        
+        iframe {
+            min-width: 400px;
+            width: 50%;
+            border: 1px solid tan;
+            background-color: white;
+        }
+
+        section {
+            position: relative;
+            margin-bottom: 2em;
+        }
+        
+        section > div {
+            position: relative;
+            padding: 5px 10px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            background-color: cornsilk;
+            border-width: 1px;
+            border-style: solid;
+        }
+
+        .req {
+            border-color: seagreen;
+        }
+        .ajax {
+            top: -1px;
+            border-color: mediumpurple;
+        }
+        .browser {
+            top: -2px;
+            border-color: dodgerblue;
+        }
+        
+        section > div > label {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            padding: 0px 10px;
+            -moz-border-top-right-radius: 4px;
+            -moz-border-bottom-left-radius: 5px;
+            -webkit-border-top-right-radius: 4px;
+            -webkit-border-bottom-left-radius: 5px;
+            border-top-right-radius: 4px;
+            border-bottom-left-radius: 5px;
+            color: cornsilk;
+        }
+        .req > label {
+            background-color: seagreen;
+        }
+        .ajax > label {
+            background-color: mediumpurple;
+        }
+        .browser > label {
+            background-color: dodgerblue;
+        }
+        
+        .req span:before {
+            content: 'Request: ';
+        }
+        .ajax div label:after {
+            content: ': ';
+        }
+        
+        .ajax > div {
+            display: none;
+        }
+        
+        .err span {
+            color: tomato;
+        }
+        
+        .browser {
+            padding: 10px;
+        }
+
+        .browser a {
+            display: inline-block;
+            padding: 0px 10px;
+            border: 1px solid tan;
+            border-bottom: none;
+            font-size: 0.75em;
+            color: lightslategrey;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="foo">
+        <div class="req">
+            <label>Request</label>
+            <span>/foo</span>
+        </div>
+        <div class="ajax">
+            <label>AJAX</label>
+            <div class="res">
+                <label>Response</label>
+                <pre></pre>
+            </div>
+            <div class="err">
+                <label>Error</label>
+                <span></span>
+                <pre></pre>
+            </div>
+        </div>
+        <div class="browser">
+            <label>Browser</label>
+            <div><a href="/foo">Direct Link</a></div>
+            <iframe src="/foo"></iframe>
+        </div>
+    </section>
+
+    <section id="fail">
+        <div class="req">
+            <label>Request</label>
+            <span>/fail</span>
+        </div>
+        <div class="ajax">
+            <label>AJAX</label>
+            <div class="res">
+                <label>Response</label>
+                <pre></pre>
+            </div>
+            <div class="err">
+                <label>Error</label>
+                <span></span>
+                <pre></pre>
+            </div>
+        </div>
+        <div class="browser">
+            <label>Browser</label>
+            <div><a href="/fail">Direct Link</a></div>
+            <iframe src="/fail"></iframe>
+        </div>
+    </section>
+
+    <section id="fail-async">
+        <div class="req">
+            <label>Request</label>
+            <span>/fail-async</span>
+        </div>
+        <div class="ajax">
+            <label>AJAX</label>
+            <div class="res">
+                <label>Response</label>
+                <pre></pre>
+            </div>
+            <div class="err">
+                <label>Error</label>
+                <span></span>
+                <pre></pre>
+            </div>
+        </div>
+        <div class="browser">
+            <label>Browser</label>
+            <div><a href="/fail-async">Direct Link</a></div>
+            <iframe src="/fail-async"></iframe>
+        </div>
+    </section>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script type="text/javascript">
+    $('section').each(function() {
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/' + id
+        })
+        .done(function(data) {
+            $('#' + id + ' .res')
+                .show()
+                .children('pre')
+                .html(JSON.stringify(data));
+        })
+        .fail(function(xhr, status, error) {
+            var data = xhr.responseJSON;
+            var errEl = $('#' + id + ' .err');
+            errEl
+                .show()
+                .children('span')
+                .html(xhr.status + ' ' + error);
+            errEl
+                .children('pre')
+                .html(JSON.stringify(data));
+        });
+    });
+
+    $('.browser a').each(function() {
+        $(this).html(window.location.protocol + '//' + window.location.host + $(this).attr('href'));
+    });
+    </script>
+</body>
+
+</html>
