@@ -13,7 +13,8 @@ var h2o = require('./../../lib/server.js'),
 
 /**
  * Defines the express application that your server will run
- * a.k.a. the routes, logic, etc. of your web application
+ * a.k.a. the routes, logic, etc. of your web application.
+ * Simply setup the application exactly as you would when using express directly.
  * @param an express application, which this function will manipulate and augment
  */
 function defineApp(app) {
@@ -52,7 +53,7 @@ h2o()
      * @param a function that accepts an express application as its only parameter
      */
     .setAppDefiner(defineApp)
-    
+
     /**
      * Sets the logger used by h2o. See lib/impl/logger-console.js for a
      * logger that simply logs to the console. You can implement
@@ -64,7 +65,7 @@ h2o()
      *     fatal(messageString)
      */
     .setLogger(logger)
-    
+
     /**
      * Sets the function that will be invoked when an error,
      * synchronous or asynchronous, occurs in your web application.
@@ -76,14 +77,14 @@ h2o()
      *     res: the HTTP response being constructed
      */
     .setErrorHandler(errorHandler)
-    
+
     /**
      * Sets the port that you web application will be listening on.
      * If port is not set explicitly, defaults to 80
      * @param a port number
      */
     .setPort(8765)
-    
+
     /**
      * Starts your web application
      */
