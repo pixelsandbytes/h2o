@@ -31,12 +31,12 @@ function defineApp(app) {
     });
 
     app.use('/fail', function appFail(req, res) {
-        /* jshint unused: false */
+        /* jshint unused: false, quotmark: false */
         throw new Error("Don't worry, the error handler will take care of this");
     });
 
     app.use('/fail-async', function appFailAsync(req, res) {
-        /* jshint unused: false */
+        /* jshint unused: false, quotmark: false */
         setTimeout(function() {
             throw new Error("I may be async, but the error handler will still catch me!");
         }, 100);

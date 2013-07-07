@@ -11,7 +11,8 @@
             font-weight: bold;
         }
 
-        pre {
+        code {
+            display: block;
             margin: 0px;
             font-size: 1.25em;
         }
@@ -120,12 +121,12 @@
             <label>AJAX</label>
             <div class="res">
                 <label>Response</label>
-                <pre></pre>
+                <code></code>
             </div>
             <div class="err">
                 <label>Error</label>
                 <span></span>
-                <pre></pre>
+                <code></code>
             </div>
         </div>
         <div class="browser">
@@ -144,12 +145,12 @@
             <label>AJAX</label>
             <div class="res">
                 <label>Response</label>
-                <pre></pre>
+                <code></code>
             </div>
             <div class="err">
                 <label>Error</label>
                 <span></span>
-                <pre></pre>
+                <code></code>
             </div>
         </div>
         <div class="browser">
@@ -168,12 +169,12 @@
             <label>AJAX</label>
             <div class="res">
                 <label>Response</label>
-                <pre></pre>
+                <code></code>
             </div>
             <div class="err">
                 <label>Error</label>
                 <span></span>
-                <pre></pre>
+                <code></code>
             </div>
         </div>
         <div class="browser">
@@ -194,7 +195,7 @@
         .done(function(data) {
             $('#' + id + ' .res')
                 .show()
-                .children('pre')
+                .children('code')
                 .html(JSON.stringify(data));
         })
         .fail(function(xhr, status, error) {
@@ -205,7 +206,7 @@
                 .children('span')
                 .html(xhr.status + ' ' + error);
             errEl
-                .children('pre')
+                .children('code')
                 .html(JSON.stringify(data));
         });
     });
