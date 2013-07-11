@@ -11,6 +11,20 @@ function stripNullUndefined(obj) {
     }
 }
 
+function getReadableHandler(stream, res) {
+    function read(chunkSize) {
+        var buf = stream.read(chunkSize);
+        while (buf) {
+            res.write(buf);
+            buf = stream.read(chunkSize);
+        }
+    }
+    return function() {
+        read(1024);
+        read();
+    };
+}
+
 /**
  * In this example, I'm streaming contents of files to the client,
  * but this can be any kind of streaming content (a templating library
@@ -24,12 +38,7 @@ function streamFile(res, fileName, status, contentType, prefix, suffix) {
     }
 
     var s = fs.createReadStream('templates/' + fileName, {encoding: 'utf8'});
-    s.on('readable', function() {
-        var buf = s.read();
-        if (buf) {
-            res.write(buf);
-        }
-    });
+    s.on('readable', getReadableHandler(s, res));
     s.on('end', function() {
         if (suffix) {
             res.write(suffix);
@@ -70,12 +79,7 @@ r.sendErrorPage = function sendErrorPage(res, err, status) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
 
     var s = fs.createReadStream('templates/error.html', {encoding: 'utf8'});
-    s.on('readable', function() {
-        var buf = s.read();
-        if (buf) {
-            res.write(buf);
-        }
-    });
+    s.on('readable', getReadableHandler(s, res));
     s.on('error', function() {
         deferred.reject();
     });
