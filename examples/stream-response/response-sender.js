@@ -11,6 +11,11 @@ function stripNullUndefined(obj) {
     }
 }
 
+/**
+ * Create and return a handler for streaming:
+ * Reads 1024 bytes from the stream at a time and
+ * writes to response
+ */
 function getReadableHandler(stream, res) {
     function read(chunkSize) {
         var buf = stream.read(chunkSize);
@@ -26,9 +31,12 @@ function getReadableHandler(stream, res) {
 }
 
 /**
- * In this example, I'm streaming contents of files to the client,
- * but this can be any kind of streaming content (a templating library
+ * In this example, I'm streaming contents of files on disk to the client,
+ * but this can be replaced with any kind of streaming content (a templating library
  * used to construct HTML pages, for example)
+ *   fileName - name of the file to stream
+ *   prefix - content to prepend before file contents
+ *   suffix - content to append after file contents
  */
 function streamFile(res, fileName, status, contentType, prefix, suffix) {
     res.statusCode = status || 200;
