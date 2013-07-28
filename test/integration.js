@@ -38,8 +38,33 @@ function createServer(defineApp) {
     return server;
 }
 
+function runTest(path, expected, done) {
+    http.get({
+        hostname: 'localhost',
+        port: 8765,
+        path: path
+    }, function(res) {
+        res.statusCode.should.equal(expected.status);
+        res.headers['content-type'].should.eql(expected.contentType);
+        res.headers['content-length'].should.eql(expected.response.length + '');
+        res.on('data', function(chunk) {
+            chunk.toString().should.equal(expected.response);
+            done();
+        });
+    }).on('error', function(e) {
+        should.fail(e);
+    });
+}
+
+function sendResponse(res, status, resString) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Content-Length', resString.length);
+    res.send(status, resString);
+    res.end();
+}
+
 /* global describe, before, it, after */
-describe('Basic server', function() {
+describe('Integration - basic server', function() {
     'use strict';
 
     var server;
@@ -48,19 +73,11 @@ describe('Basic server', function() {
         function defineApp(app) {
 
             app.use('/foo', function appFoo(req, res) {
-                var resString = 'bar';
-                res.setHeader('Content-Type', 'text/html; charset=utf-8');
-                res.setHeader('Content-Length', resString.length);
-                res.send(200, resString);
-                res.end();
+                sendResponse(res, 200, 'bar');
             });
 
             app.use('/error', function appError(req, res) {
-                var resString = 'bad request';
-                res.setHeader('Content-Type', 'text/html; charset=utf-8');
-                res.setHeader('Content-Length', resString.length);
-                res.send(400, resString);
-                res.end();
+                sendResponse(res, 400, 'bad request');
             });
 
             app.use('/fail', function appFail(req, res) {
@@ -74,67 +91,31 @@ describe('Basic server', function() {
 
     describe('/foo', function() {
         it('should return a 200 response', function(done) {
-            var response = 'bar';
-
-            http.get({
-                hostname: 'localhost',
-                port: 8765,
-                path: '/foo'
-            }, function(res) {
-                res.statusCode.should.equal(200);
-                res.headers['content-type'].should.eql('text/html; charset=utf-8');
-                res.headers['content-length'].should.eql(response.length + '');
-                res.on('data', function(chunk) {
-                    chunk.toString().should.equal(response);
-                    done();
-                });
-            }).on('error', function(e) {
-                should.fail(e);
-            });
+            runTest('/foo', {
+                status: 200,
+                contentType: 'text/html; charset=utf-8',
+                response: 'bar'
+            }, done);
         });
     });
 
     describe('/error', function() {
         it('should return a 400 response', function(done) {
-            var response = 'bad request';
-
-            http.get({
-                hostname: 'localhost',
-                port: 8765,
-                path: '/error'
-            }, function(res) {
-                res.statusCode.should.equal(400);
-                res.headers['content-type'].should.eql('text/html; charset=utf-8');
-                res.headers['content-length'].should.eql(response.length + '');
-                res.on('data', function(chunk) {
-                    chunk.toString().should.equal(response);
-                    done();
-                });
-            }).on('error', function(e) {
-                should.fail(e);
-            });
+            runTest('/error', {
+                status: 400,
+                contentType: 'text/html; charset=utf-8',
+                response: 'bad request'
+            }, done);
         });
     });
 
     describe('/fail', function() {
         it('should return a 500 response', function(done) {
-            var response = 'failed';
-
-            http.get({
-                hostname: 'localhost',
-                port: 8765,
-                path: '/fail'
-            }, function(res) {
-                res.statusCode.should.equal(500);
-                res.headers['content-type'].should.eql('text/html; charset=utf-8');
-                res.headers['content-length'].should.eql(response.length + '');
-                res.on('data', function(chunk) {
-                    chunk.toString().should.equal(response);
-                    done();
-                });
-            }).on('error', function(e) {
-                should.fail(e);
-            });
+            runTest('/fail', {
+                status: 500,
+                contentType: 'text/html; charset=utf-8',
+                response: 'failed'
+            }, done);
         });
     });
 
