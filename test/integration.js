@@ -44,11 +44,15 @@ function runTest(path, expected, done) {
         port: 8765,
         path: path
     }, function(res) {
+        var resString = '';
         res.statusCode.should.equal(expected.status);
         res.headers['content-type'].should.eql(expected.contentType);
         res.headers['content-length'].should.eql(expected.response.length + '');
         res.on('data', function(chunk) {
-            chunk.toString().should.equal(expected.response);
+            resString += chunk;
+        });
+        res.on('end', function() {
+            resString.should.equal(expected.response);
             done();
         });
     }).on('error', function(e) {
@@ -122,4 +126,67 @@ describe('Integration - basic server', function() {
     after(function() {
         server.close();
     });
+});
+
+describe('Integration - server with streaming and delays', function() {
+    'use strict';
+
+    var server;
+
+    before(function() {
+        function defineApp(app) {
+
+            app.use('/chunky', function appFoo(req, res) {
+                var resString1 = 'foo',
+                    resString2 = 'bar',
+                    resString3 = 'baz';
+                res.setHeader('Content-Type', 'text/html; charset=utf-8');
+                res.setHeader('Content-Length', resString1.length + resString2.length + resString3.length);
+                setTimeout(function() {
+                    res.write(resString1);
+                    setTimeout(function() {
+                        res.write(resString2);
+                        setTimeout(function() {
+                            res.write(resString3);
+                            res.end();
+                        }, 10);
+                    }, 10);
+                }, 10);
+            });
+
+            app.use('/delayed-fail', function appError(req, res) {
+                setTimeout(function() {
+                    throw new Error('failed');
+                }, 100);
+            });
+
+        }
+
+        server = createServer(defineApp);
+    });
+
+    describe('/chunky', function() {
+        it('should return a 200 response', function(done) {
+            runTest('/chunky', {
+                status: 200,
+                contentType: 'text/html; charset=utf-8',
+                response: 'foobarbaz'
+            }, done);
+        });
+    });
+
+    describe('/delayed-fail', function() {
+        it('should return a 500 response', function(done) {
+            runTest('/delayed-fail', {
+                status: 500,
+                contentType: 'text/html; charset=utf-8',
+                response: 'failed'
+            }, done);
+        });
+    });
+
+    after(function() {
+        server.close();
+    });
+
 });
