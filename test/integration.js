@@ -154,12 +154,6 @@ describe('Integration - server with streaming and delays', function() {
                 }, 10);
             });
 
-            app.use('/delayed-fail', function appError(req, res) {
-                setTimeout(function() {
-                    throw new Error('failed');
-                }, 100);
-            });
-
         }
 
         server = createServer(defineApp);
@@ -171,16 +165,6 @@ describe('Integration - server with streaming and delays', function() {
                 status: 200,
                 contentType: 'text/html; charset=utf-8',
                 response: 'foobarbaz'
-            }, done);
-        });
-    });
-
-    describe('/delayed-fail', function() {
-        it('should return a 500 response', function(done) {
-            runTest('/delayed-fail', {
-                status: 500,
-                contentType: 'text/html; charset=utf-8',
-                response: 'failed'
             }, done);
         });
     });
