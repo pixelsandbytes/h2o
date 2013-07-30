@@ -29,23 +29,23 @@ See [examples/][examples-link] for express web applications built using h2o.
         .setNumWorkersInCluster(2)
         .run();
 
-__setAppDefiner__ (required)
-> Must be called with a function that defines the application. The provided function will be called with `app` provided.
+__setAppDefiner__ (required)  
+Must be called with a function that defines the application. The provided function will be called with `app` provided.
 
-__setLogger__ (required)
-> Must be called with a logger object that implements `info(message)`, `warn(message)`, `error(message)`, and `fatal(message)`.
+__setLogger__ (required)  
+Must be called with a logger object that implements `info(message)`, `warn(message)`, `error(message)`, and `fatal(message)`.
 
-__setErrorHandler__ (required)
-> Must be called with a function that handles any errors that occur. The provided function will be called with `(err, req, res, nextNotUsed)`.
+__setErrorHandler__ (required)  
+Must be called with a function that handles any errors that occur. The provided function will be called with `(err, req, res, nextNotUsed)`.
 
-__setPort__ (optional)
-> Can be called to port that the web application listens on.  Defaults to 80.
+__setPort__ (optional)  
+Can be called to port that the web application listens on.  Defaults to 80.
 
-__setClusterUse__ (optional)
-> Can be called to set whether a cluster is used or not to.  Using a cluster enables a worker process to restart if an error occurs. Defaults to true.
+__setClusterUse__ (optional)  
+Can be called to set whether a cluster is used or not to.  Using a cluster enables a worker process to restart if an error occurs. Defaults to true.
 
-__setNumWorkersInCluster__ (optional)
-> Can be called to set the number of workers to fork in the cluster.  Defaults to the number of CPUs/cores.
+__setNumWorkersInCluster__ (optional)  
+Can be called to set the number of workers to fork in the cluster.  Defaults to the number of CPUs/cores.
 
 [express-link]: http://expressjs.com
 [examples-link]: examples
